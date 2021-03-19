@@ -3,10 +3,10 @@ title: "Predictive Model Workshop"
 author: "Yuxiao Luo"
 date: "3/18/2021"
 output:
-  html_document:
-    df_print: paged
   md_document:
     variant: markdown_github
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -56,17 +56,16 @@ library(tidyverse)
 data("titanic_train")
 data("titanic_test")
 str(titanic_train)
-
 ```
 
 Alternatively, you can input the data by downloading it from my Github repo and reading it into R with library `readr`.
+
 ```{r, warning = F}
 library(readr)
-library(here)
-titanic_train <- read_csv(here("Documents", "R", "Workshop", "PredictiveModeling", "data","titanic_train.csv"))
-titanic_test <- read_csv(here("Documents", "R", "Workshop", "PredictiveModeling", "data","titanic_test.csv"))
+getwd()
+titanic_train <- read_csv("data/titanic_train.csv")
+titanic_test <- read_csv("data/titanic_test.csv")
 ```
-
 
 Let's clean the dataset by extracting four variables (`Survived`, `Pclass`, `Age`,`Sex`) and change the variable type to `factor` for `Survived` and `Pclass`. Since the data has been pre-processed by other people and is pretty clean, we don't do much thing here. Usually, you will have more work to do for your raw data.
 
