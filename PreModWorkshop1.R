@@ -162,4 +162,3 @@ confusionMatrix(pred, titanic_train$Survived)
 
 
 
-
