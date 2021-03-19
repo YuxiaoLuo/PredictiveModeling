@@ -70,12 +70,6 @@ repo and reading it into R with library `readr`.
 
 ``` r
 library(readr)
-getwd()
-```
-
-    ## [1] "C:/Users/Yuxiao Luo/Documents/R/Workshop/PredictiveModeling"
-
-``` r
 titanic_train <- read_csv("data/titanic_train.csv")
 ```
 
@@ -108,6 +102,9 @@ people and is pretty clean, we don’t do much thing here. Usually, you
 will have more work to do for your raw data.
 
 ``` r
+data("titanic_train")
+data("titanic_test")
+
 # clean the data
 titanic_train <- titanic_train %>% 
   select(Survived, Pclass, Age, Sex) %>% 
@@ -141,23 +138,23 @@ summary(logistic)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.0249  -0.6779  -0.3781   0.6163   2.5022  
+    ## -2.7303  -0.6780  -0.3953   0.6485   2.4657  
     ## 
     ## Coefficients:
     ##              Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)  3.927549   0.477099   8.232  < 2e-16 ***
-    ## Pclass2     -1.385308   0.338906  -4.088 4.36e-05 ***
-    ## Pclass3     -2.674247   0.335473  -7.972 1.57e-15 ***
-    ## Age         -0.040304   0.009203  -4.380 1.19e-05 ***
-    ## Sexmale     -2.525422   0.250179 -10.094  < 2e-16 ***
+    ## (Intercept)  3.777013   0.401123   9.416  < 2e-16 ***
+    ## Pclass2     -1.309799   0.278066  -4.710 2.47e-06 ***
+    ## Pclass3     -2.580625   0.281442  -9.169  < 2e-16 ***
+    ## Age         -0.036985   0.007656  -4.831 1.36e-06 ***
+    ## Sexmale     -2.522781   0.207391 -12.164  < 2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 449.22  on 495  degrees of freedom
-    ## AIC: 459.22
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 647.28  on 709  degrees of freedom
+    ## AIC: 657.28
     ## 
     ## Number of Fisher Scoring iterations: 5
 
@@ -184,25 +181,25 @@ summary(mod_inte)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -1.9856  -0.6314  -0.4068   0.6508   2.3995  
+    ## -2.6515  -0.6591  -0.4006   0.6297   2.4209  
     ## 
     ## Coefficients:
-    ##              Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)  4.442113   0.725402   6.124 9.15e-10 ***
-    ## Pclass2     -1.587757   0.903010  -1.758  0.07870 .  
-    ## Pclass3     -3.588736   0.799733  -4.487 7.21e-06 ***
-    ## Age         -0.052415   0.016240  -3.228  0.00125 ** 
-    ## Sexmale     -2.553110   0.252870 -10.097  < 2e-16 ***
-    ## Pclass2:Age  0.002058   0.024173   0.085  0.93214    
-    ## Pclass3:Age  0.030339   0.021830   1.390  0.16459    
+    ##               Estimate Std. Error z value Pr(>|z|)    
+    ## (Intercept)  3.546e+00  5.700e-01   6.222 4.92e-10 ***
+    ## Pclass2     -6.092e-01  7.153e-01  -0.852 0.394407    
+    ## Pclass3     -2.478e+00  6.387e-01  -3.880 0.000105 ***
+    ## Age         -3.067e-02  1.284e-02  -2.387 0.016964 *  
+    ## Sexmale     -2.553e+00  2.100e-01 -12.156  < 2e-16 ***
+    ## Pclass2:Age -2.191e-02  1.949e-02  -1.124 0.261017    
+    ## Pclass3:Age -3.707e-05  1.796e-02  -0.002 0.998353    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 446.82  on 493  degrees of freedom
-    ## AIC: 460.82
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 645.63  on 707  degrees of freedom
+    ## AIC: 659.63
     ## 
     ## Number of Fisher Scoring iterations: 5
 
@@ -221,32 +218,32 @@ summary(mod_inte)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.6060  -0.6337  -0.4067   0.4140   3.0623  
+    ## -2.9892  -0.6291  -0.4238   0.3812   3.3852  
     ## 
     ## Coefficients:
     ##                     Estimate Std. Error z value Pr(>|z|)  
-    ## (Intercept)          8.75379    4.99563   1.752   0.0797 .
-    ## Pclass2             -5.24863    5.17796  -1.014   0.3108  
-    ## Pclass3             -8.60149    5.01532  -1.715   0.0863 .
-    ## Age                 -0.10785    0.09848  -1.095   0.2735  
-    ## Sexmale             -7.11886    5.05514  -1.408   0.1591  
-    ## Pclass2:Age          0.06284    0.10515   0.598   0.5501  
-    ## Pclass3:Age          0.09709    0.10012   0.970   0.3322  
-    ## Pclass2:Sexmale      4.22680    5.29911   0.798   0.4251  
-    ## Pclass3:Sexmale      6.36284    5.10200   1.247   0.2124  
-    ## Age:Sexmale          0.05537    0.10021   0.553   0.5806  
-    ## Pclass2:Age:Sexmale -0.09573    0.11143  -0.859   0.3903  
-    ## Pclass3:Age:Sexmale -0.09197    0.10401  -0.884   0.3766  
+    ## (Intercept)          1.57559    1.45292   1.084   0.2782  
+    ## Pclass2              2.48900    1.97071   1.263   0.2066  
+    ## Pclass3             -1.10790    1.50839  -0.734   0.4626  
+    ## Age                  0.05761    0.05095   1.131   0.2582  
+    ## Sexmale             -0.40014    1.58512  -0.252   0.8007  
+    ## Pclass2:Age         -0.10862    0.06224  -1.745   0.0809 .
+    ## Pclass3:Age         -0.08664    0.05356  -1.617   0.1058  
+    ## Pclass2:Sexmale     -2.75606    2.17646  -1.266   0.2054  
+    ## Pclass3:Sexmale     -0.87304    1.68742  -0.517   0.6049  
+    ## Age:Sexmale         -0.09714    0.05314  -1.828   0.0675 .
+    ## Pclass2:Age:Sexmale  0.04114    0.06996   0.588   0.5565  
+    ## Pclass3:Age:Sexmale  0.08859    0.05795   1.529   0.1263  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 421.83  on 488  degrees of freedom
-    ## AIC: 445.83
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 601.33  on 702  degrees of freedom
+    ## AIC: 625.33
     ## 
-    ## Number of Fisher Scoring iterations: 8
+    ## Number of Fisher Scoring iterations: 6
 
 It looks good though. Why don’t we let the algorithm do the model
 selection for us? I will use **Stepwise Algorithm** to do that job.
@@ -274,32 +271,32 @@ summary(fullmod)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.6060  -0.6337  -0.4067   0.4140   3.0623  
+    ## -2.9892  -0.6291  -0.4238   0.3812   3.3852  
     ## 
     ## Coefficients:
     ##                     Estimate Std. Error z value Pr(>|z|)  
-    ## (Intercept)          8.75379    4.99563   1.752   0.0797 .
-    ## Pclass2             -5.24863    5.17796  -1.014   0.3108  
-    ## Pclass3             -8.60149    5.01532  -1.715   0.0863 .
-    ## Age                 -0.10785    0.09848  -1.095   0.2735  
-    ## Sexmale             -7.11886    5.05514  -1.408   0.1591  
-    ## Pclass2:Age          0.06284    0.10515   0.598   0.5501  
-    ## Pclass3:Age          0.09709    0.10012   0.970   0.3322  
-    ## Pclass2:Sexmale      4.22680    5.29911   0.798   0.4251  
-    ## Pclass3:Sexmale      6.36284    5.10200   1.247   0.2124  
-    ## Age:Sexmale          0.05537    0.10021   0.553   0.5806  
-    ## Pclass2:Age:Sexmale -0.09573    0.11143  -0.859   0.3903  
-    ## Pclass3:Age:Sexmale -0.09197    0.10401  -0.884   0.3766  
+    ## (Intercept)          1.57559    1.45292   1.084   0.2782  
+    ## Pclass2              2.48900    1.97071   1.263   0.2066  
+    ## Pclass3             -1.10790    1.50839  -0.734   0.4626  
+    ## Age                  0.05761    0.05095   1.131   0.2582  
+    ## Sexmale             -0.40014    1.58512  -0.252   0.8007  
+    ## Pclass2:Age         -0.10862    0.06224  -1.745   0.0809 .
+    ## Pclass3:Age         -0.08664    0.05356  -1.617   0.1058  
+    ## Pclass2:Sexmale     -2.75606    2.17646  -1.266   0.2054  
+    ## Pclass3:Sexmale     -0.87304    1.68742  -0.517   0.6049  
+    ## Age:Sexmale         -0.09714    0.05314  -1.828   0.0675 .
+    ## Pclass2:Age:Sexmale  0.04114    0.06996   0.588   0.5565  
+    ## Pclass3:Age:Sexmale  0.08859    0.05795   1.529   0.1263  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 421.83  on 488  degrees of freedom
-    ## AIC: 445.83
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 601.33  on 702  degrees of freedom
+    ## AIC: 625.33
     ## 
-    ## Number of Fisher Scoring iterations: 8
+    ## Number of Fisher Scoring iterations: 6
 
 The are two ways for the **Stepwise Algorithm** to work, one is backward
 selection and the other is forward selection. Both will give you the
@@ -310,29 +307,21 @@ same result though. Let me try backward selection first.
 bwd <- step(fullmod, direction = "backward")
 ```
 
-    ## Start:  AIC=445.83
+    ## Start:  AIC=625.33
     ## Survived ~ Pclass * Age * Sex
     ## 
     ##                  Df Deviance    AIC
-    ## - Pclass:Age:Sex  2   422.84 442.84
-    ## <none>                421.83 445.83
+    ## - Pclass:Age:Sex  2   604.34 624.34
+    ## <none>                601.33 625.33
     ## 
-    ## Step:  AIC=442.84
+    ## Step:  AIC=624.34
     ## Survived ~ Pclass + Age + Sex + Pclass:Age + Pclass:Sex + Age:Sex
     ## 
     ##              Df Deviance    AIC
-    ## - Pclass:Age  2   424.72 440.72
-    ## - Age:Sex     1   424.63 442.63
-    ## <none>            422.84 442.84
-    ## - Pclass:Sex  2   436.57 452.57
-    ## 
-    ## Step:  AIC=440.72
-    ## Survived ~ Pclass + Age + Sex + Pclass:Sex + Age:Sex
-    ## 
-    ##              Df Deviance    AIC
-    ## <none>            424.72 440.72
-    ## - Age:Sex     1   427.78 441.78
-    ## - Pclass:Sex  2   437.13 449.13
+    ## <none>            604.34 624.34
+    ## - Age:Sex     1   606.92 624.92
+    ## - Pclass:Age  2   611.11 627.11
+    ## - Pclass:Sex  2   631.83 647.83
 
 ``` r
 # show the model backward chose
@@ -341,31 +330,33 @@ summary(bwd)
 
     ## 
     ## Call:
-    ## glm(formula = Survived ~ Pclass + Age + Sex + Pclass:Sex + Age:Sex, 
-    ##     family = "binomial", data = titanic_train)
+    ## glm(formula = Survived ~ Pclass + Age + Sex + Pclass:Age + Pclass:Sex + 
+    ##     Age:Sex, family = "binomial", data = titanic_train)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.7922  -0.6427  -0.4090   0.4568   2.6879  
+    ## -2.6219  -0.6405  -0.3971   0.3376   3.2713  
     ## 
     ## Coefficients:
     ##                 Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)      4.92606    1.17396   4.196 2.72e-05 ***
-    ## Pclass2         -2.21545    1.11884  -1.980   0.0477 *  
-    ## Pclass3         -4.55819    1.06634  -4.275 1.91e-05 ***
-    ## Age             -0.02097    0.01605  -1.307   0.1913    
-    ## Sexmale         -3.11707    1.30060  -2.397   0.0165 *  
-    ## Pclass2:Sexmale  0.34856    1.21728   0.286   0.7746    
-    ## Pclass3:Sexmale  2.35787    1.13962   2.069   0.0385 *  
-    ## Age:Sexmale     -0.03592    0.02046  -1.756   0.0792 .  
+    ## (Intercept)      3.41025    0.96744   3.525 0.000423 ***
+    ## Pclass2          1.24535    1.20069   1.037 0.299644    
+    ## Pclass3         -3.17259    0.91924  -3.451 0.000558 ***
+    ## Age             -0.00293    0.02188  -0.134 0.893489    
+    ## Sexmale         -2.48345    0.91908  -2.702 0.006890 ** 
+    ## Pclass2:Age     -0.06445    0.02621  -2.458 0.013954 *  
+    ## Pclass3:Age     -0.01534    0.01972  -0.778 0.436844    
+    ## Pclass2:Sexmale -1.45924    0.89989  -1.622 0.104892    
+    ## Pclass3:Sexmale  1.68959    0.73022   2.314 0.020678 *  
+    ## Age:Sexmale     -0.03034    0.01887  -1.608 0.107767    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 424.72  on 492  degrees of freedom
-    ## AIC: 440.72
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 604.34  on 704  degrees of freedom
+    ## AIC: 624.34
     ## 
     ## Number of Fisher Scoring iterations: 6
 
@@ -376,54 +367,59 @@ Then, let’s try forward selection.
 fwd <- step(nullmod, scope = list(upper = fullmod), direction = "forward")
 ```
 
-    ## Start:  AIC=680.28
+    ## Start:  AIC=966.52
     ## Survived ~ 1
     ## 
     ##          Df Deviance    AIC
-    ## + Sex     1   528.30 532.30
-    ## + Pclass  2   613.97 619.97
-    ## + Age     1   673.19 677.19
-    ## <none>        678.28 680.28
+    ## + Sex     1   750.70 754.70
+    ## + Pclass  2   869.81 875.81
+    ## + Age     1   960.23 964.23
+    ## <none>        964.52 966.52
     ## 
-    ## Step:  AIC=532.3
+    ## Step:  AIC=754.7
     ## Survived ~ Sex
     ## 
     ##          Df Deviance    AIC
-    ## + Pclass  2   470.13 478.13
-    ## <none>        528.30 532.30
-    ## + Age     1   527.75 533.75
+    ## + Pclass  2   672.43 680.43
+    ## <none>        750.70 754.70
+    ## + Age     1   749.96 755.96
     ## 
-    ## Step:  AIC=478.13
+    ## Step:  AIC=680.43
     ## Survived ~ Sex + Pclass
     ## 
     ##              Df Deviance    AIC
-    ## + Age         1   449.22 459.22
-    ## + Pclass:Sex  2   450.25 462.25
-    ## <none>            470.13 478.13
+    ## + Pclass:Sex  2   642.28 654.28
+    ## + Age         1   647.28 657.28
+    ## <none>            672.43 680.43
     ## 
-    ## Step:  AIC=459.22
-    ## Survived ~ Sex + Pclass + Age
+    ## Step:  AIC=654.28
+    ## Survived ~ Sex + Pclass + Sex:Pclass
     ## 
-    ##              Df Deviance    AIC
-    ## + Pclass:Sex  2   427.78 441.78
-    ## + Age:Sex     1   437.13 449.13
-    ## <none>            449.22 459.22
-    ## + Pclass:Age  2   446.82 460.82
+    ##        Df Deviance    AIC
+    ## + Age   1   613.43 627.43
+    ## <none>      642.28 654.28
     ## 
-    ## Step:  AIC=441.78
+    ## Step:  AIC=627.43
     ## Survived ~ Sex + Pclass + Age + Sex:Pclass
     ## 
     ##              Df Deviance    AIC
-    ## + Age:Sex     1   424.72 440.72
-    ## <none>            427.78 441.78
-    ## + Pclass:Age  2   424.63 442.63
+    ## + Pclass:Age  2   606.92 624.92
+    ## + Age:Sex     1   611.11 627.11
+    ## <none>            613.43 627.43
     ## 
-    ## Step:  AIC=440.72
-    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Sex:Age
+    ## Step:  AIC=624.92
+    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age
     ## 
-    ##              Df Deviance    AIC
-    ## <none>            424.72 440.72
-    ## + Pclass:Age  2   422.84 442.84
+    ##           Df Deviance    AIC
+    ## + Age:Sex  1   604.34 624.34
+    ## <none>         606.92 624.92
+    ## 
+    ## Step:  AIC=624.34
+    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age + Sex:Age
+    ## 
+    ##                  Df Deviance    AIC
+    ## <none>                604.34 624.34
+    ## + Pclass:Age:Sex  2   601.33 625.33
 
 ``` r
 # show the model forward chose
@@ -432,122 +428,132 @@ summary(fwd)
 
     ## 
     ## Call:
-    ## glm(formula = Survived ~ Sex + Pclass + Age + Sex:Pclass + Sex:Age, 
-    ##     family = "binomial", data = titanic_train)
+    ## glm(formula = Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age + 
+    ##     Sex:Age, family = "binomial", data = titanic_train)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.7922  -0.6427  -0.4090   0.4568   2.6879  
+    ## -2.6219  -0.6405  -0.3971   0.3376   3.2713  
     ## 
     ## Coefficients:
     ##                 Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)      4.92606    1.17396   4.196 2.72e-05 ***
-    ## Sexmale         -3.11707    1.30060  -2.397   0.0165 *  
-    ## Pclass2         -2.21545    1.11884  -1.980   0.0477 *  
-    ## Pclass3         -4.55819    1.06634  -4.275 1.91e-05 ***
-    ## Age             -0.02097    0.01605  -1.307   0.1913    
-    ## Sexmale:Pclass2  0.34856    1.21728   0.286   0.7746    
-    ## Sexmale:Pclass3  2.35787    1.13962   2.069   0.0385 *  
-    ## Sexmale:Age     -0.03592    0.02046  -1.756   0.0792 .  
+    ## (Intercept)      3.41025    0.96744   3.525 0.000423 ***
+    ## Sexmale         -2.48345    0.91908  -2.702 0.006890 ** 
+    ## Pclass2          1.24535    1.20069   1.037 0.299644    
+    ## Pclass3         -3.17259    0.91924  -3.451 0.000558 ***
+    ## Age             -0.00293    0.02188  -0.134 0.893489    
+    ## Sexmale:Pclass2 -1.45924    0.89989  -1.622 0.104892    
+    ## Sexmale:Pclass3  1.68959    0.73022   2.314 0.020678 *  
+    ## Pclass2:Age     -0.06445    0.02621  -2.458 0.013954 *  
+    ## Pclass3:Age     -0.01534    0.01972  -0.778 0.436844    
+    ## Sexmale:Age     -0.03034    0.01887  -1.608 0.107767    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 424.72  on 492  degrees of freedom
-    ## AIC: 440.72
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 604.34  on 704  degrees of freedom
+    ## AIC: 624.34
     ## 
     ## Number of Fisher Scoring iterations: 6
 
 The most convenient way is to use the Stepwise regression.
 
-    ## Start:  AIC=680.28
+    ## Start:  AIC=966.52
     ## Survived ~ 1
     ## 
     ##          Df Deviance    AIC
-    ## + Sex     1   528.30 532.30
-    ## + Pclass  2   613.97 619.97
-    ## + Age     1   673.19 677.19
-    ## <none>        678.28 680.28
+    ## + Sex     1   750.70 754.70
+    ## + Pclass  2   869.81 875.81
+    ## + Age     1   960.23 964.23
+    ## <none>        964.52 966.52
     ## 
-    ## Step:  AIC=532.3
+    ## Step:  AIC=754.7
     ## Survived ~ Sex
     ## 
     ##          Df Deviance    AIC
-    ## + Pclass  2   470.13 478.13
-    ## <none>        528.30 532.30
-    ## + Age     1   527.75 533.75
-    ## - Sex     1   678.28 680.28
+    ## + Pclass  2   672.43 680.43
+    ## <none>        750.70 754.70
+    ## + Age     1   749.96 755.96
+    ## - Sex     1   964.52 966.52
     ## 
-    ## Step:  AIC=478.13
+    ## Step:  AIC=680.43
     ## Survived ~ Sex + Pclass
     ## 
     ##              Df Deviance    AIC
-    ## + Age         1   449.22 459.22
-    ## + Pclass:Sex  2   450.25 462.25
-    ## <none>            470.13 478.13
-    ## - Pclass      2   528.30 532.30
-    ## - Sex         1   613.97 619.97
+    ## + Pclass:Sex  2   642.28 654.28
+    ## + Age         1   647.28 657.28
+    ## <none>            672.43 680.43
+    ## - Pclass      2   750.70 754.70
+    ## - Sex         1   869.81 875.81
     ## 
-    ## Step:  AIC=459.22
-    ## Survived ~ Sex + Pclass + Age
+    ## Step:  AIC=654.28
+    ## Survived ~ Sex + Pclass + Sex:Pclass
     ## 
     ##              Df Deviance    AIC
-    ## + Pclass:Sex  2   427.78 441.78
-    ## + Age:Sex     1   437.13 449.13
-    ## <none>            449.22 459.22
-    ## + Pclass:Age  2   446.82 460.82
-    ## - Age         1   470.13 478.13
-    ## - Pclass      2   527.75 533.75
-    ## - Sex         1   573.90 581.90
+    ## + Age         1   613.43 627.43
+    ## <none>            642.28 654.28
+    ## - Sex:Pclass  2   672.43 680.43
     ## 
-    ## Step:  AIC=441.78
+    ## Step:  AIC=627.43
     ## Survived ~ Sex + Pclass + Age + Sex:Pclass
     ## 
     ##              Df Deviance    AIC
-    ## + Age:Sex     1   424.72 440.72
-    ## <none>            427.78 441.78
-    ## + Pclass:Age  2   424.63 442.63
-    ## - Sex:Pclass  2   449.22 459.22
-    ## - Age         1   450.25 462.25
+    ## + Pclass:Age  2   606.92 624.92
+    ## + Age:Sex     1   611.11 627.11
+    ## <none>            613.43 627.43
+    ## - Age         1   642.28 654.28
+    ## - Sex:Pclass  2   647.28 657.28
     ## 
-    ## Step:  AIC=440.72
-    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Sex:Age
+    ## Step:  AIC=624.92
+    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age
     ## 
     ##              Df Deviance    AIC
-    ## <none>            424.72 440.72
-    ## - Sex:Age     1   427.78 441.78
-    ## + Pclass:Age  2   422.84 442.84
-    ## - Sex:Pclass  2   437.13 449.13
+    ## + Age:Sex     1   604.34 624.34
+    ## <none>            606.92 624.92
+    ## - Pclass:Age  2   613.43 627.43
+    ## - Sex:Pclass  2   645.63 659.63
+    ## 
+    ## Step:  AIC=624.34
+    ## Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age + Sex:Age
+    ## 
+    ##                  Df Deviance    AIC
+    ## <none>                604.34 624.34
+    ## - Sex:Age         1   606.92 624.92
+    ## + Pclass:Age:Sex  2   601.33 625.33
+    ## - Pclass:Age      2   611.11 627.11
+    ## - Sex:Pclass      2   631.83 647.83
 
     ## 
     ## Call:
-    ## glm(formula = Survived ~ Sex + Pclass + Age + Sex:Pclass + Sex:Age, 
-    ##     family = "binomial", data = titanic_train)
+    ## glm(formula = Survived ~ Sex + Pclass + Age + Sex:Pclass + Pclass:Age + 
+    ##     Sex:Age, family = "binomial", data = titanic_train)
     ## 
     ## Deviance Residuals: 
     ##     Min       1Q   Median       3Q      Max  
-    ## -2.7922  -0.6427  -0.4090   0.4568   2.6879  
+    ## -2.6219  -0.6405  -0.3971   0.3376   3.2713  
     ## 
     ## Coefficients:
     ##                 Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)      4.92606    1.17396   4.196 2.72e-05 ***
-    ## Sexmale         -3.11707    1.30060  -2.397   0.0165 *  
-    ## Pclass2         -2.21545    1.11884  -1.980   0.0477 *  
-    ## Pclass3         -4.55819    1.06634  -4.275 1.91e-05 ***
-    ## Age             -0.02097    0.01605  -1.307   0.1913    
-    ## Sexmale:Pclass2  0.34856    1.21728   0.286   0.7746    
-    ## Sexmale:Pclass3  2.35787    1.13962   2.069   0.0385 *  
-    ## Sexmale:Age     -0.03592    0.02046  -1.756   0.0792 .  
+    ## (Intercept)      3.41025    0.96744   3.525 0.000423 ***
+    ## Sexmale         -2.48345    0.91908  -2.702 0.006890 ** 
+    ## Pclass2          1.24535    1.20069   1.037 0.299644    
+    ## Pclass3         -3.17259    0.91924  -3.451 0.000558 ***
+    ## Age             -0.00293    0.02188  -0.134 0.893489    
+    ## Sexmale:Pclass2 -1.45924    0.89989  -1.622 0.104892    
+    ## Sexmale:Pclass3  1.68959    0.73022   2.314 0.020678 *  
+    ## Pclass2:Age     -0.06445    0.02621  -2.458 0.013954 *  
+    ## Pclass3:Age     -0.01534    0.01972  -0.778 0.436844    
+    ## Sexmale:Age     -0.03034    0.01887  -1.608 0.107767    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
     ## (Dispersion parameter for binomial family taken to be 1)
     ## 
-    ##     Null deviance: 678.28  on 499  degrees of freedom
-    ## Residual deviance: 424.72  on 492  degrees of freedom
-    ## AIC: 440.72
+    ##     Null deviance: 964.52  on 713  degrees of freedom
+    ## Residual deviance: 604.34  on 704  degrees of freedom
+    ## AIC: 624.34
     ## 
     ## Number of Fisher Scoring iterations: 6
 
