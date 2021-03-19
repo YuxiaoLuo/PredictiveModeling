@@ -1,0 +1,178 @@
+---
+title: "Predictive Model Workshop"
+author: "Yuxiao Luo"
+date: "3/18/2021"
+output:
+  html_document:
+    df_print: paged
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Build a logistic regression model
+
+### Titanic dataset description
+The `titanic` library in R has 4 different datasets, they are **titanic_train**, **titanic_test**, **titanic_gender_model**, and **titanic_gender_class_model**. They describe the survival status of individual passengers on the Titanic. The variable description can be found below:  
+
+1. Pclass: Passenger Class (1 = 1st, 2 = 2nd, 3 = 3rd)  
+
+2. survived: Survival (0 = No; 1 = Yes) 
+
+3. name: Name  
+
+4. sex: Sex  
+
+5. age: Age  
+
+6. sibsp: Number of Siblings/Spouses Aboard  
+
+7. parch: Number of Parents/Children Aboard  
+
+8. ticket: Ticket Number  
+
+9. fare: Passenger Fare (British pound)  
+
+10. cabin: Cabin  
+
+11. embarked: Port of Embarkation
+
+    (C = Cherbourg; Q = Queenstown; S = Southampton) 
+   
+12. boat: Lifeboat
+
+13. body: Body Identification Number  
+
+14. home.dest: Home/Destination  
+
+### Data preprocessing
+We use the `titanic` library to load the data.
+```{r load data, message=F, warning=F}
+library(titanic)
+library(tidyverse)
+data("titanic_train")
+data("titanic_test")
+str(titanic_train)
+
+```
+
+Alternatively, you can input the data by downloading it from my Github repo and reading it into R with library `readr`.
+```{r, warning = F}
+library(readr)
+library(here)
+titanic_train <- read_csv(here("Documents", "R", "Workshop", "PredictiveModeling", "data","titanic_train.csv"))
+titanic_test <- read_csv(here("Documents", "R", "Workshop", "PredictiveModeling", "data","titanic_test.csv"))
+```
+
+
+Let's clean the dataset by extracting four variables (`Survived`, `Pclass`, `Age`,`Sex`) and change the variable type to `factor` for `Survived` and `Pclass`. Since the data has been pre-processed by other people and is pretty clean, we don't do much thing here. Usually, you will have more work to do for your raw data.
+
+```{r, message = F, warning = F}
+# clean the data
+titanic_train <- titanic_train %>% 
+  select(Survived, Pclass, Age, Sex) %>% 
+  mutate(Survived = as.factor(Survived), Pclass = as.factor(Pclass)) %>%  na.omit()
+
+titanic_test <- titanic_test %>% 
+  select(Pclass, Age, Sex) %>% 
+  mutate(Pclass = as.factor(Pclass)) %>% na.omit()
+```
+
+
+Let's do preliminary descriptive analysis using `ggpairs` function in `GGally` library. The function will generate a matrix of selected variables. 
+
+```{r descriptive, echo=F, message=FALSE}
+GGally::ggpairs(titanic_train, axisLabels = "internal")
+```
+
+### Modeling
+Then, let's fit a logistic regression model to it and use `summary` function to see the model details. 
+
+```{r}
+logistic <- glm(Survived ~ Pclass + Age + Sex, family = "binomial", data = titanic_train)
+summary(logistic)
+```
+
+The model looks good and all selected variables are significant, we want to explore and see whether there are better models. Let's try interaction terms. 
+
+#### Interaction terms
+
+An interaction occurs when an independent variable has a different effect on the outcome depending on the values of another independent variable. We want to check `Age` and `Pclass` first because typically older may earn more money and thus, buy expensive tickets. 
+
+```{r}
+mod_inte <- glm(Survived ~ Pclass + Age + Sex + Age*Pclass, family = "binomial", data = titanic_train)
+summary(mod_inte)
+```
+
+The result doesn't show any trace. Then, let's do a full interaction model and try every possible combination. 
+
+```{r}
+mod_inte <- glm(Survived ~ Pclass*Age*Sex, family = "binomial", data = titanic_train)
+summary(mod_inte)
+```
+
+It looks good though. Why don't we let the algorithm do the model selection for us? I will use **Stepwise Algorithm** to do that job. First, I will create two models as the starting point for the algorithm. 
+
++ null model means no variable is in the model.
+
++ full model means the model contains all variables and possible interaction terms. 
+
+```{r}
+# model with nothing
+nullmod <- glm(Survived ~ 1, family = "binomial", data = titanic_train)
+
+# model with all possible interaction term
+fullmod <- glm(Survived ~ Pclass*Age*Sex, family = "binomial", data = titanic_train)
+
+summary(fullmod)
+```
+
+The are two ways for the **Stepwise Algorithm** to work, one is backward selection and the other is forward selection. Both will give you the same result though. Let me try backward selection first.
+
+```{r}
+# backward Stepwise algorithm AIC
+bwd <- step(fullmod, direction = "backward")
+# show the model backward chose
+summary(bwd)
+```
+
+Then, let's try forward selection. 
+
+```{r}
+# forward stepwise algorithm
+fwd <- step(nullmod, scope = list(upper = fullmod), direction = "forward")
+# show the model forward chose
+summary(fwd)
+```
+
+The most convenient way is to use the Stepwise regression. 
+
+```{r, echo = F}
+both <- step(nullmod, scope = list(upper = fullmod), direction = "both")
+summary(both)
+```
+
+Let's visualize the effects of the variables then.
+```{r}
+plot(effects::allEffects(both))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
