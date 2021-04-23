@@ -162,8 +162,85 @@ plot(effects::allEffects(both))
 ```
 
 
+## Build a regularized logistic regression
+We use the `glmnet` library to build the regularized logistic regression (elastic nets) and tune the hyperparameter using `caret`. As we want to predict whether a passenger survived (1 = surivied, 0 = didn't) using predictors (age, sex, class). What we will do next:
 
+- Train a model using training set
 
+- Predict survival in test set
+
+```{r, warning=F}
+library(glmnet)
+library(caret)
+reg_logistic <- caret::train(
+  Survived ~ Pclass*Age*Sex,
+  data = titanic_train, 
+  preProc = c("center", "scale", "zv"),
+  method = "glmnet",
+  family = "binomial",
+  trControl = trainControl(
+    method = "cv", number = 10
+  ),
+  tuneLength = 7
+)
+
+```
+
+- `preProcess` argument specifies how you preprocess the data before piping it into the model. Use `?preProcess` see pre-processing options of training data. 
+
+- Use `?trainControl` see training options. We use 10-fold cross validation.
+
+- `tuneLength` specifies the regularization parameter `alpha`
+
+Let's then take a look at the training model and see the hypeparameter for the best tune model generated from 10-fold cross validation. 
+```{r}
+summary(reg_logistic)
+reg_logistic$bestTune
+```
+We can also view the variable importance using `vip` function. `Pclass3` is the most important among all the variables.
+```{r}
+# plotting variable importance
+vip::vip(reg_logistic)
+```
+To evaluate the model performance, we use confusion matrix because we are dealing with a classification problem.
+
+- The upper left and bottom right cells show the number of correct classifications.
+
+- The upper right and bottom left cells show the number of wrong classifications.
+
+- Accuracy means how many classifications are correctly predicted in total and is calculated using (TP + TN)/(TP+FP+FN+TN)
+
+  - TP(true positive): upper left cell
+  
+  - TN(true negative): bottom right cell 
+  
+  - FP(false positive): upper right cell
+  
+  - FN(false negative): bottom left cell
+
+- Specificity means the proportion of 0s that are correctly classified and is calculated using TN/(TN+FP)
+
+- Sensitivity means the proportion of actual 1s that are classified correctly and is calculated using TP/(TP+FN)
+
+```{r}
+# find average bootstrap accuracy
+confusionMatrix(reg_logistic)
+```
+
+As we can see, the accuracy is *0.8053*. Accuracy estimates how often I classify right or the percentage of times that my model predicts correctly. I estimate that my regularized logistic regression predicts correctly 80% of the times. 
+
+Let's use the trained model to predict on the test set and see the predicted result. The output table shows the probability of each possible result (1 = Survivied, 0 = didn't).  
+```{r}
+titanic_test <- titanic_test %>% mutate(
+  preds_reg = predict(reg_logistic, newdata = titanic_test, type = "prob"),
+)
+head(titanic_test$preds_reg)
+```
+
+We can also visualize the parameter tuning for regularized regression.
+```{r,warning=F}
+ggplot(reg_logistic)
+```
 
 
 

@@ -564,3 +564,184 @@ plot(effects::allEffects(both))
 ```
 
 ![](PreModWorkshop_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+Build a regularized logistic regression
+---------------------------------------
+
+We use the `glmnet` library to build the regularized logistic regression
+(elastic nets) and tune the hyperparameter using `caret`. As we want to
+predict whether a passenger survived (1 = surivied, 0 = didn’t) using
+predictors (age, sex, class). What we will do next:
+
+-   Train a model using training set
+
+-   Predict survival in test set
+
+``` r
+library(glmnet)
+```
+
+    ## Loading required package: Matrix
+
+    ## 
+    ## Attaching package: 'Matrix'
+
+    ## The following objects are masked from 'package:tidyr':
+    ## 
+    ##     expand, pack, unpack
+
+    ## Loaded glmnet 4.1-1
+
+``` r
+library(caret)
+```
+
+    ## Loading required package: lattice
+
+    ## 
+    ## Attaching package: 'caret'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     lift
+
+``` r
+reg_logistic <- caret::train(
+  Survived ~ Pclass*Age*Sex,
+  data = titanic_train, 
+  preProc = c("center", "scale", "zv"),
+  method = "glmnet",
+  family = "binomial",
+  trControl = trainControl(
+    method = "cv", number = 10
+  ),
+  tuneLength = 7
+)
+```
+
+-   `preProcess` argument specifies how you preprocess the data before
+    piping it into the model. Use `?preProcess` see pre-processing
+    options of training data.
+
+-   Use `?trainControl` see training options. We use 10-fold cross
+    validation.
+
+-   `tuneLength` specifies the regularization parameter `alpha`
+
+Let’s then take a look at the training model and see the hypeparameter
+for the best tune model generated from 10-fold cross validation.
+
+``` r
+summary(reg_logistic)
+```
+
+    ##             Length Class      Mode     
+    ## a0           78    -none-     numeric  
+    ## beta        858    dgCMatrix  S4       
+    ## df           78    -none-     numeric  
+    ## dim           2    -none-     numeric  
+    ## lambda       78    -none-     numeric  
+    ## dev.ratio    78    -none-     numeric  
+    ## nulldev       1    -none-     numeric  
+    ## npasses       1    -none-     numeric  
+    ## jerr          1    -none-     numeric  
+    ## offset        1    -none-     logical  
+    ## classnames    2    -none-     character
+    ## call          5    -none-     call     
+    ## nobs          1    -none-     numeric  
+    ## lambdaOpt     1    -none-     numeric  
+    ## xNames       11    -none-     character
+    ## problemType   1    -none-     character
+    ## tuneValue     2    data.frame list     
+    ## obsLevels     2    -none-     character
+    ## param         1    -none-     list
+
+``` r
+reg_logistic$bestTune
+```
+
+    ##    alpha    lambda
+    ## 47     1 0.0167364
+
+We can also view the variable importance using `vip` function. `Pclass3`
+is the most important among all the variables.
+
+``` r
+# plotting variable importance
+vip::vip(reg_logistic)
+```
+
+![](PreModWorkshop_files/figure-markdown_github/unnamed-chunk-13-1.png)
+To evaluate the model performance, we use confusion matrix because we
+are dealing with a classification problem.
+
+-   The upper left and bottom right cells show the number of correct
+    classifications.
+
+-   The upper right and bottom left cells show the number of wrong
+    classifications.
+
+-   Accuracy means how many classifications are correctly predicted in
+    total and is calculated using (TP + TN)/(TP+FP+FN+TN)
+
+    -   TP(true positive): upper left cell
+
+    -   TN(true negative): bottom right cell
+
+    -   FP(false positive): upper right cell
+
+    -   FN(false negative): bottom left cell
+
+-   Specificity means the proportion of 0s that are correctly classified
+    and is calculated using TN/(TN+FP)
+
+-   Sensitivity means the proportion of actual 1s that are classified
+    correctly and is calculated using TP/(TP+FN)
+
+``` r
+# find average bootstrap accuracy
+confusionMatrix(reg_logistic)
+```
+
+    ## Cross-Validated (10 fold) Confusion Matrix 
+    ## 
+    ## (entries are percentual average cell counts across resamples)
+    ##  
+    ##           Reference
+    ## Prediction    0    1
+    ##          0 51.8 11.5
+    ##          1  7.6 29.1
+    ##                             
+    ##  Accuracy (average) : 0.8095
+
+As we can see, the accuracy is *0.8053*. Accuracy estimates how often I
+classify right or the percentage of times that my model predicts
+correctly. I estimate that my regularized logistic regression predicts
+correctly 80% of the times.
+
+Let’s use the trained model to predict on the test set and see the
+predicted result. The output table shows the probability of each
+possible result (1 = Survivied, 0 = didn’t).
+
+``` r
+titanic_test <- titanic_test %>% mutate(
+  preds_reg = predict(reg_logistic, newdata = titanic_test, type = "prob"),
+)
+head(titanic_test$preds_reg)
+```
+
+    ##           0          1
+    ## 1 0.8954186 0.10458142
+    ## 2 0.5505312 0.44946882
+    ## 3 0.9834028 0.01659716
+    ## 4 0.8620376 0.13796236
+    ## 5 0.4829268 0.51707323
+    ## 6 0.7835211 0.21647886
+
+We can also visualize the parameter tuning for regularized regression.
+
+``` r
+ggplot(reg_logistic)
+```
+
+![](PreModWorkshop_files/figure-markdown_github/unnamed-chunk-16-1.png)
