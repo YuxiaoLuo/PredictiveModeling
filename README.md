@@ -22,7 +22,7 @@ Abstract:
 - It would benefit students if they came to this workshop with some basic notions of how RStduio works. Any 5-10 minute long tutorial on youtube should be enough for that. Whoever is leading the workshop should give them the link.
 
 ## Reception and Feedback
-More feedback will be collected and summarized here in the future.
+The first workshop receives positive feedback and students have interests in it. More feedback will be collected and summarized here in the future.
 
 ## Needed/Desired Changes
 The current version of the workshop has no challenges/exercises. May add some in the future. 
