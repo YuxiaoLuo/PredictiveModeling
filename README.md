@@ -5,7 +5,7 @@ This is solid workshop that can be both taught as a stand-alone workshop or as p
 This workshop was written by [Yuxiao Luo](https://github.com/YuxiaoLuo) and adapted from a wonderful R workshop by [Víctor Peña](https://github.com/VicPena).
 
 ## Workshops
-The [Introduction to R & RStudio](https://github.com/YuxiaoLuo/PredictiveModeling/blob/main/IntroR.R) (adapted from (Intro to R Workshop)[https://github.com/GC-DRI/R]) is a preliminary workshop for predictive modeling in R and was first taught at CUNY GCDI by Yuxiao Luo on 10/01/2021 as a 1.5 hours online synchronous.
+The [Introduction to R & RStudio](https://github.com/YuxiaoLuo/PredictiveModeling/blob/main/IntroR.R), adapted from (Intro to R Workshop)[https://github.com/GC-DRI/R], is a preliminary workshop for predictive modeling in R and was first taught at CUNY GCDI by Yuxiao Luo on 10/01/2021 as a 1.5 hours online synchronous.
 
 The first part [PreModWorkshop1.R](https://github.com/YuxiaoLuo/PredictiveModeling/blob/main/PreModWorkshop1.R) was first taught at CUNY GCDI by Yuxiao Luo on 03/19/2021 as a two hour online synchronous workshop.
 
