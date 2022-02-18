@@ -1,7 +1,8 @@
 #####################################
-# Predictive modeling in R
+# Predictive modeling in R II
 # Build a model to do regression 
-#
+# Predicting continuous output 
+
 library(GGally) # some useful graphics
 library(caret) # automatic model tunning
 library(tidyverse) # plots, data-wrangling functions
@@ -15,10 +16,13 @@ library(rsample) # splitting data
 # read in https://github.com/YuxiaoLuo/PredictiveModeling/blob/main/data/nycrest.csv
 # nyc dataset: Italian restaurants in nyc
 
-nycrest <- read.csv("https://github.com/YuxiaoLuo/PredictiveModeling/blob/main/data/nycrest.csv")
+nycrest <- read_csv("https://raw.githubusercontent.com/YuxiaoLuo/PredictiveModeling/main/data/nycrest.csv") %>%
+  subset(select = Restaurant:East)
 
 # split the data randomly into training and test
 set.seed(123) # this ensures that we get the same random split 
+
+# use rsample for splitting dataset
 split <- initial_split(nycrest, prop = 0.7) # 70% training, 30% testing 
 
 train <- training(split)
@@ -40,16 +44,23 @@ train %>% select(Price, Food, Service, Decor) %>% ggcorr(label = T)
 # it combines the lasso (absolute value penalty) with ridge (squared error penalty)
 names(getModelInfo("glmnet"))
 
-regularized_reg <- train(
+# use the train() function caret package
+regularized_reg <- caret::train(
   Price ~ Food + Decor + Service + East, 
-  train,
-  preProc = c("center", "scale"),
+  train,  # training set
+  preProc = c("center", "scale"), # preprocess predictors 
   method = "glmnet",
   metric = "RMSE", 
   trControl = trainControl(
-    method = "cv"
+    method = "cv",
+    number = 10 # by default, it's 10-fold
   )
 )
+
+# center: subtracts the mean of the predictor's data
+# scale: divides by the standard deviation 
+# you have other options: zv, corr, conditionalX
+# ?preProcess will give you more details
 
 regularized_reg
 
@@ -101,32 +112,33 @@ library(GGally) #contains useful plots
 train %>% ggpairs
 train %>% select(hwy, cty, displ, cyl) %>% ggcorr(label = T)
 
+# there are categorical var, check consistency 
 train %>% count(fl)
 test %>% count(fl)
 # some categories in training set are not in testing set --> remove fl
 
-test = test %>% filter(fl != "c")
+test <-  test %>% filter(fl != "c")
 test %>% count(fl)
-
 
 train %>% count(trans)
 test %>% count(trans)
 # not enough observations for the categories
-
-
+# auto(13) not in training set
+# auto(s5) not in test set
 
 # run regularized regression
 library(glmnet)
 library(caret)
 
 regularized_reg <- train(
-  hwy ~ displ + year + cyl + trans + drv + cty + class,
+  hwy ~ displ + year + cyl + drv + cty + class,
   train,
   preProc = c("center", "scale", "zv"),
   method = "glmnet",
   metric = "RMSE",
   trControl = trainControl(
-    method = "cv"
+    method = "cv",
+    number = 20
   )
 )
 
@@ -139,15 +151,20 @@ library(vip)
 vip(regularized_reg)
 
 # run vanilla linear regression
+lm_mpg <- lm(hwy ~ displ + year + cyl + drv + cty + class, data = train)
 
 # predict hwy in test set
-test <- test %>% mutate(preds = predict(regularized_reg, newdata = test))
+test <- test %>% mutate(preds_reg = predict(regularized_reg, newdata = test),
+                        preds_lm = predict(lm_mpg, newdata = test))
 
 # find MSE
-test %>% summarize(MSE = mean((hwy - preds)^2))
+test %>% summarize(MSE_reg = mean((hwy - preds_reg)^2),
+                   MSE_lm = mean((hwy - preds_lm)^2))
 
 # plot predictions against actual prices
 ggplot(test) + 
-  aes(x = preds, y = hwy) + 
+  aes(x = preds_lm, y = hwy) + 
   geom_point() + 
   geom_smooth(method = "lm")
+
+dev.off()

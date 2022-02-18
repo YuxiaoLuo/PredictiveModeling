@@ -5,6 +5,8 @@
 ##############################################
 
 2+2
+
+# To execute the R script command for each line
 # ctrl + enter
 
 ########################
@@ -127,7 +129,13 @@ bill_total
 ############
 ## Data Type
 
-# int, dbl, chr, dttm, lgl, fctr, date
+# int: integer
+# dbl: double
+# chr: character
+# dttm: date and time
+# lgl: logical
+# fctr: factor
+# date: date
 
 # typeof(), data type of your vector
 dec <- c(3.24, 4.2, 2.04, 7.5)
@@ -457,7 +465,6 @@ install_version
 
 # access the band instruments dataset in dplyr package
 dplyr::band_instruments
-
 
 # load a package in the memory use library()
 library(dplyr)
